@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Card, CardContent } from "./_components/ui/card";
+import AuthProvider from "./_providers/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,18 +20,19 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
+        <AuthProvider>
         {children}
         <Toaster />
-
-        <footer>
-          <Card>
-            <CardContent className="px-5 py-6">
-              <p className="text-sm text-gray-400">
-                © 2024 Copyright <span className="font-bold">Everton Tarelli Dev</span>
-              </p>
-            </CardContent>
-          </Card>
-        </footer>  
+          <footer>
+            <Card>
+              <CardContent className="px-5 py-6">
+                <p className="text-sm text-gray-400">
+                  © 2024 Copyright <span className="font-bold">Everton Tarelli Dev</span>
+                </p>
+              </CardContent>
+            </Card>
+          </footer>
+        </AuthProvider>
         </body>
     </html>
   );
