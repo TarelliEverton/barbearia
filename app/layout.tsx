@@ -21,8 +21,10 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={inter.className}>
         <AuthProvider>
-        {children}
-        <Toaster />
+        <div className="flex flex-col h-full">
+          <div className="flex-1">
+            {children}
+          </div>
           <footer>
             <Card>
               <CardContent className="px-5 py-6">
@@ -32,7 +34,9 @@ export default function RootLayout({
               </CardContent>
             </Card>
           </footer>
+          </div>  
         </AuthProvider>
+        <Toaster />
         </body>
     </html>
   );
