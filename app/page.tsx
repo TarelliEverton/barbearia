@@ -7,14 +7,30 @@ import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
 import Search from "./_components/ui/search"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
 
 const Home = async() => {
+  const session = await getServerSession(authOptions)
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany ({
     orderBy: {
       name: 'desc',
     },
   })
+
+  const bookings = session?.user ? await db.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+      },
+      include: {
+        service: {
+          include: {
+            barbershop: true
+          }
+        }
+      }
+  }) : []
   
   return <div>
     
@@ -47,7 +63,11 @@ const Home = async() => {
               <Image alt="banner de agendamento" src="/banner-01.png" fill className="object-cover" />
           </div>
 
-          <BookingItem />
+          <div className="flex overflow-x-auto">
+            {bookings.map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
+          </div> 
 
             <h2 className="uppercase text-xs text-gray-400 mt-6 mb-3">Recomendados</h2>
 
